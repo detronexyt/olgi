@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OLGI — dwie propozycje graficzne · porównanie</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23111110'/%3E%3Ctext x='50' y='50' font-family='Helvetica,Arial,sans-serif' font-size='40' font-weight='600' fill='%23FAFAF7' text-anchor='middle' dominant-baseline='central'%3EAB%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  --bg:#EDEBE6; --panel:#FFFFFF; --ink:#111110; --ink-2:#4A4842; --muted:#7B7A73;
+  --line:#D8D5CE; --a:#B4441F; --b:#0D0D0C;
+  --f:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --m:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.6;font-weight:400;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit}
+.mono{font-family:var(--m);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- topbar ---- */
+.bar{position:sticky;top:0;z-index:20;background:rgba(237,235,230,.9);backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar__in{max-width:1720px;margin-inline:auto;padding:14px clamp(14px,2.5vw,28px);
+  display:flex;align-items:center;gap:16px 22px;flex-wrap:wrap;justify-content:space-between}
+.bar__title{display:flex;align-items:baseline;gap:10px}
+.bar__title b{font-size:16px;letter-spacing:-.04em;font-weight:600}
+.group{display:flex;gap:6px;background:#E1DED8;padding:4px;border-radius:999px}
+.group button{
+  font:inherit;font-size:12.5px;font-weight:500;border:0;background:transparent;color:var(--ink-2);
+  padding:7px 14px;border-radius:999px;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease);
+  white-space:nowrap}
+.group button[aria-pressed="true"]{background:var(--ink);color:#FAFAF7}
+.group button:hover:not([aria-pressed="true"]){background:rgba(0,0,0,.06)}
+.open{display:flex;gap:8px;flex-wrap:wrap}
+.open a{font-family:var(--m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;border:1px solid var(--line);background:var(--panel);padding:9px 13px;border-radius:999px;
+  transition:border-color .25s var(--ease),background .25s var(--ease)}
+.open a:hover{border-color:var(--ink);background:#fff}
+
+/* ---- stage ---- */
+.stage{max-width:1720px;margin-inline:auto;padding:clamp(14px,2.2vw,26px);
+  display:grid;gap:clamp(14px,1.8vw,22px);grid-template-columns:repeat(2,minmax(0,1fr))}
+.stage[data-view="a"],.stage[data-view="b"]{grid-template-columns:minmax(0,1fr)}
+.stage[data-view="a"] .pane[data-v="b"],.stage[data-view="b"] .pane[data-v="a"]{display:none}
+@media(max-width:900px){.stage{grid-template-columns:minmax(0,1fr)}}
+
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(0,0,0,.03),0 12px 30px rgba(0,0,0,.05)}
+.pane__head{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:14px 18px;border-bottom:1px solid var(--line)}
+.pane__id{display:flex;align-items:center;gap:11px}
+.chip{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--m);font-size:11px;font-weight:500;color:#FAFAF7;flex:none}
+.pane[data-v="a"] .chip{background:var(--a)}
+.pane[data-v="b"] .chip{background:var(--b)}
+.pane__name{font-size:14.5px;font-weight:600;letter-spacing:-.02em}
+.pane__sub{font-family:var(--m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.viewport{position:relative;background:#F6F5F2;overflow:hidden;height:clamp(460px,74vh,940px)}
+.pane[data-v="b"] .viewport{background:#0D0D0C}
+.viewport iframe{border:0;position:absolute;top:0;left:0;transform-origin:top left;display:block;background:transparent;
+  box-shadow:0 0 0 1px rgba(120,120,110,.22)}
+
+.pane__foot{padding:14px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+.pane__foot b{font-weight:600;color:var(--ink)}
+
+/* ---- table ---- */
+.cmp{max-width:1720px;margin:0 auto;padding:0 clamp(14px,2.2vw,26px) clamp(40px,5vw,72px)}
+.cmp h2{font-size:clamp(1.2rem,2vw,1.5rem);letter-spacing:-.03em;font-weight:600;margin:0 0 6px}
+.cmp p.sub{color:var(--muted);margin:0 0 22px;font-size:14px}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{text-align:left;padding:15px 18px;border-bottom:1px solid var(--line);vertical-align:top;font-size:13.5px}
+thead th{font-family:var(--m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  background:#F6F5F2;font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td:first-child,th:first-child{width:22%;font-weight:500}
+@media(max-width:760px){
+  table,thead,tbody,tr,td,th{display:block}
+  thead{display:none}
+  tr{border-bottom:1px solid var(--line)}
+  tr:last-child{border-bottom:0}
+  td{border-bottom:0;padding:6px 16px}
+  td:first-child{padding-top:16px;font-family:var(--m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);width:auto;font-weight:400}
+  td[data-l]::before{content:attr(data-l) " — ";font-weight:600}
+}
+.note{margin-top:18px;font-size:12.5px;color:var(--muted);max-width:80ch}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar__in">
+    <div class="bar__title">
+      <b>OLGI — dwie propozycje</b>
+      <span class="mono">Podgląd na żywo</span>
+    </div>
+
+    <div class="group" role="group" aria-label="Widok">
+      <button data-view="both" aria-pressed="true">Obok siebie</button>
+      <button data-view="a" aria-pressed="false">Tylko A</button>
+      <button data-view="b" aria-pressed="false">Tylko B</button>
+    </div>
+
+    <div class="group" role="group" aria-label="Szerokość ekranu">
+      <button data-w="1440" aria-pressed="true">Desktop</button>
+      <button data-w="1024" aria-pressed="false">Tablet</button>
+      <button data-w="390" aria-pressed="false">Telefon</button>
+    </div>
+
+    <div class="open">
+      <a href="wariant-a.html" target="_blank" rel="noopener">Otwórz A ↗</a>
+      <a href="wariant-b.html" target="_blank" rel="noopener">Otwórz B ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="stage" id="stage" data-view="both">
+  <section class="pane" data-v="a">
+    <div class="pane__head">
+      <div class="pane__id">
+        <span class="chip">A</span>
+        <div>
+          <div class="pane__name">Editorial</div>
+          <div class="pane__sub">Jasny · serif · spokojny</div>
+        </div>
+      </div>
+      <span class="mono" id="lab-a">1440 px</span>
+    </div>
+    <div class="viewport"><iframe src="wariant-a.html" title="Wariant A — Editorial" loading="lazy"></iframe></div>
+    <div class="pane__foot"><b>Wrażenie:</b> pracownia projektowa. Dużo światła, zdjęcia opakowań niosą cały kolor.</div>
+  </section>
+
+  <section class="pane" data-v="b">
+    <div class="pane__head">
+      <div class="pane__id">
+        <span class="chip">B</span>
+        <div>
+          <div class="pane__name">Kontrast</div>
+          <div class="pane__sub">Ciemny · grotesk · techniczny</div>
+        </div>
+      </div>
+      <span class="mono" id="lab-b">1440 px</span>
+    </div>
+    <div class="viewport"><iframe src="wariant-b.html" title="Wariant B — Kontrast" loading="lazy"></iframe></div>
+    <div class="pane__foot"><b>Wrażenie:</b> studio z zapleczem produkcyjnym. Mocny, zapada w pamięć.</div>
+  </section>
+</div>
+
+<div class="cmp">
+  <h2>Czym się różnią</h2>
+  <p class="sub">Treść, struktura sekcji i SEO są w obu wariantach identyczne. Różnica jest wyłącznie w warstwie graficznej.</p>
+
+  <table>
+    <thead><tr><th></th><th>A — Editorial</th><th>B — Kontrast</th></tr></thead>
+    <tbody>
+      <tr><td>Tło i kolor</td><td data-l="A">Złamana biel #FAFAF7, tekst prawie czarny, jeden ceglany akcent #B4441F.</td><td data-l="B">Grafit #0D0D0C, tekst ciepła biel, piaskowy akcent #C9B79A. Sekcja kontaktu na odwrót — jasna.</td></tr>
+      <tr><td>Typografia</td><td data-l="A">Inter + kursywa szeryfowa Newsreader w nagłówkach. Wielkość i małe litery.</td><td data-l="B">Space Grotesk, wersaliki, ciasny tracking. Etykiety w monospace w nawiasach [01].</td></tr>
+      <tr><td>Charakter</td><td data-l="A">Spokojny, redakcyjny, „galeryjny”. Bliżej studia graficznego.</td><td data-l="B">Zdecydowany, techniczny, przemysłowy. Bliżej producenta i prepressu.</td></tr>
+      <tr><td>Zdjęcia realizacji</td><td data-l="A">Kadry pionowe 4:5, jasne tło — dobrze wyglądają zdjęcia packshotowe na białym.</td><td data-l="B">Kadry poziome 16:11 na ciemnym tle — opakowania mocno „wychodzą” z ekranu.</td></tr>
+      <tr><td>Ruch</td><td data-l="A">Minimalny: delikatne wejścia sekcji, podkreślenia w menu.</td><td data-l="B">Dodatkowo przewijający się pasek usług i pionowa siatka w tle.</td></tr>
+      <tr><td>Ryzyka</td><td data-l="A">Przy słabych zdjęciach strona może wydać się pusta — jasne tło niczego nie ukryje.</td><td data-l="B">Ciemne tło bywa gorzej odbierane przez część klientów B2B i trudniej się je drukuje w ofertach.</td></tr>
+      <tr><td>Dla kogo</td><td data-l="A">Marki premium, food &amp; beauty, klienci ceniący estetykę i spokój.</td><td data-l="B">Klienci przemysłowi, duże nakłady, rozmowa o technologii i produkcji.</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">Podgląd jest osadzony w ramkach i przeskalowany — proporcje i typografia są prawdziwe, ale najlepiej ocenić każdy wariant na pełnym ekranie („Otwórz A / B” w pasku u góry). Kafelki w sekcji „Realizacje” to placeholdery — po wstawieniu zdjęć obie wersje zyskają, wariant B mocniej.</p>
+</div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var frames=[].slice.call(document.querySelectorAll('.viewport iframe'));
+  var W=1440;
+
+  function press(list, el){ list.forEach(function(b){ b.setAttribute('aria-pressed', b===el ? 'true':'false'); }); }
+
+  function layout(){
+    frames.forEach(function(f){
+      var vp=f.parentElement;
+      var avail=vp.clientWidth;
+      var s=Math.min(1, avail/W);
+      f.style.width=W+'px';
+      f.style.height=Math.ceil(vp.clientHeight/s)+'px';
+      f.style.transform='scale('+s+')';
+      f.style.marginLeft=Math.max(0,(avail-W*s)/2)+'px';
+    });
+  }
+
+  var viewBtns=[].slice.call(document.querySelectorAll('[data-view]')).filter(function(b){return b.tagName==='BUTTON'});
+  viewBtns.forEach(function(b){
+    b.addEventListener('click',function(){
+      stage.setAttribute('data-view', b.dataset.view);
+      press(viewBtns,b);
+      requestAnimationFrame(layout);
+    });
+  });
+
+  var wBtns=[].slice.call(document.querySelectorAll('[data-w]'));
+  wBtns.forEach(function(b){
+    b.addEventListener('click',function(){
+      W=parseInt(b.dataset.w,10);
+      press(wBtns,b);
+      document.getElementById('lab-a').textContent=W+' px';
+      document.getElementById('lab-b').textContent=W+' px';
+      layout();
+    });
+  });
+
+  window.addEventListener('resize', layout);
+  frames.forEach(function(f){ f.addEventListener('load', layout); });
+  layout();
+  setTimeout(layout, 400);
+})();
+</script>
+</body>
+</html>
