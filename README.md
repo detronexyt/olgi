@@ -49,16 +49,14 @@ wymaga planu Pro / Team).
 
 ### 2. Włączenie Pages
 
-W repo leży workflow `.github/workflows/pages.yml`, który po każdym pushu na
-`main` wysyła całą zawartość repo na Pages. Jednorazowo trzeba wskazać źródło:
+Zrobione — `Settings → Pages → Source: Deploy from a branch → main / (root)`.
 
-`Settings → Pages → Source: GitHub Actions`
-
-Po ~minucie strona jest pod `https://detronexyt.github.io/olgi/`.
+Strona stoi pod `https://detronexyt.github.io/olgi/`.
 To dobry adres na czas wybierania wariantu.
 
-Kolejne deploye lecą same przy każdym pushu na `main`; ręcznie można je odpalić
-z zakładki `Actions → Deploy to GitHub Pages → Run workflow`.
+Każdy push na `main` publikuje się sam, po ~minucie. Postęp builda widać
+w zakładce `Actions` jako `pages build and deployment`. Plik `.nojekyll`
+wyłącza przetwarzanie Jekyllem — pliki idą na serwer jeden do jednego.
 
 ### 3. Własna domena olgi.pl
 
