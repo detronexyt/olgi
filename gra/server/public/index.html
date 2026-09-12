@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karty dżentelmenów</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <h1>🎩 Karty dżentelmenów</h1>
+  <div id="roomBadge" class="room-badge hidden"></div>
+</header>
+
+<main id="app">
+
+  <!-- EKRAN: START -->
+  <section id="screen-start" class="screen">
+    <div class="card panel">
+      <label>Twoja ksywka</label>
+      <input id="nameInput" type="text" maxlength="20" placeholder="np. Hrabia Kaczyński">
+
+      <div class="row">
+        <button id="btnCreate" class="btn primary">Stwórz pokój</button>
+      </div>
+
+      <div class="divider">albo</div>
+
+      <div class="row">
+        <input id="codeInput" type="text" maxlength="4" placeholder="KOD POKOJU" class="code-input">
+        <button id="btnJoin" class="btn">Dołącz</button>
+      </div>
+
+      <p id="startError" class="error hidden"></p>
+    </div>
+  </section>
+
+  <!-- EKRAN: POCZEKALNIA -->
+  <section id="screen-lobby" class="screen hidden">
+    <div class="card panel">
+      <h2>Poczekalnia</h2>
+      <p>Podaj znajomym kod pokoju:</p>
+      <div class="room-code" id="lobbyCode">----</div>
+
+      <h3>Gracze (<span id="lobbyCount">0</span>)</h3>
+      <ul id="lobbyPlayers" class="player-list"></ul>
+
+      <p class="hint">Potrzeba minimum 3 graczy, żeby zacząć.</p>
+      <button id="btnStart" class="btn primary" disabled>Zaczynamy!</button>
+    </div>
+  </section>
+
+  <!-- EKRAN: GRA -->
+  <section id="screen-game" class="screen hidden">
+
+    <div class="game-top">
+      <div class="black-card" id="blackCard">
+        <div class="black-card-text" id="blackCardText">…</div>
+        <div class="black-card-pick" id="blackCardPick"></div>
+      </div>
+
+      <div class="side-panel">
+        <div class="timer" id="timer">--</div>
+        <div class="round-info" id="roundInfo">Runda 1</div>
+        <ul id="scoreList" class="score-list"></ul>
+      </div>
+    </div>
+
+    <div id="phaseMessage" class="phase-message"></div>
+
+    <!-- Twoja ręka (widoczna w fazie 'submitting', gdy nie jesteś sędzią) -->
+    <div id="handArea" class="hand-area hidden">
+      <h3>Twoje karty</h3>
+      <div id="hand" class="hand"></div>
+      <button id="btnSubmit" class="btn primary" disabled>Wyślij odpowiedź</button>
+    </div>
+
+    <!-- Karty do oceny (widoczne w fazie 'judging') -->
+    <div id="judgeArea" class="judge-area hidden">
+      <h3 id="judgeTitle">Zgłoszenia</h3>
+      <div id="submissionsList" class="submissions"></div>
+    </div>
+
+    <!-- Wynik rundy -->
+    <div id="revealArea" class="reveal-area hidden">
+      <h3 id="revealTitle"></h3>
+      <div id="revealCards" class="submissions"></div>
+    </div>
+
+  </section>
+
+  <!-- EKRAN: KONIEC GRY -->
+  <section id="screen-end" class="screen hidden">
+    <div class="card panel">
+      <h2>🏆 Koniec gry</h2>
+      <p id="endWinner" class="end-winner"></p>
+      <ul id="endScores" class="player-list"></ul>
+      <p class="hint">Odśwież stronę, żeby zagrać jeszcze raz.</p>
+    </div>
+  </section>
+
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>
+</body>
+</html>
